@@ -31,4 +31,5 @@ public class Post {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt = new Date();
+
 }

@@ -1,9 +1,7 @@
 package com.FivePoints.Spring.services;
 
 import com.FivePoints.Spring.models.Post;
-import com.FivePoints.Spring.models.User;
 import com.FivePoints.Spring.repositories.PostRepository;
-import com.FivePoints.Spring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +18,11 @@ public class PostService {
         return this.postRepository.findAll();
     }
 
-    public Post addPost(Post newPost) {
-        return this.postRepository.save(newPost);
-    }
+        public String addPost(Post newPost) {
+            this.postRepository.save(newPost);
+            return "User added successfully" ;
+
+        }
 
     public Optional<Post> findPost(Integer id) {
         return postRepository.findById(id);
@@ -41,5 +41,8 @@ public class PostService {
                     return postRepository.save(post);
                 });
 
+    }
+    public Post findPostByTitle(String title){
+     return postRepository.findByTitle(title);
     }
 }

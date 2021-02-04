@@ -1,13 +1,13 @@
 package com.FivePoints.Spring.controllers;
 
 import com.FivePoints.Spring.models.User;
+import com.FivePoints.Spring.payload.responses.MessageResponse;
 import com.FivePoints.Spring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -22,23 +22,37 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    User newUser(@RequestBody User newUser) {
-        return userService.addUser(newUser);
+    ResponseEntity<MessageResponse> newUser(@RequestBody User newUser) {
+        String message =  userService.addUser(newUser);
+        return ResponseEntity.ok().body(new MessageResponse(message));
     }
 
   @GetMapping("/findUser/{id}")
-         Optional<User> findUser (@PathVariable("id") Integer id) {
-            return userService.findUser(id);
+  ResponseEntity<?> findUser (@PathVariable("id") Integer id) {
+        User user= userService.findUser(id);
+        if(user!=null){
+            return ResponseEntity.ok().body(user);
         }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable("id") Integer id) {
-
-        return userService.deleteUser(id);
+    public  ResponseEntity<MessageResponse> deleteUser(@PathVariable("id") Integer id) {
+        String message =  userService.deleteUser(id);
+        return ResponseEntity.ok().body(new MessageResponse(message));
     }
+
     @PutMapping("/UpdateUser/{id}")
-    Optional<User> updateUser (@PathVariable("id") Integer id, @RequestBody User newUser) {
-        return userService.updateUser(id,newUser);
+    ResponseEntity<MessageResponse>  updateUser (@PathVariable("id") Integer id, @RequestBody User newUser) {
+       String  message =  userService.updateUser(id,newUser);
+        return  ResponseEntity.ok().body(new MessageResponse(message));
     }
-
+    @GetMapping("/findUserByEmail/{email}")
+    User User (@PathVariable("email") String email) {
+        return userService.findUserByEmail(email);
+    }
 }
 

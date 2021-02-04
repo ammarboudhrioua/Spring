@@ -21,30 +21,36 @@ public class UserService {
     public List<User> allUsers() {
         return userRepository.findAll();
     }
-
-    public User addUser(User newUser) {
-        return userRepository.save(newUser);
+    public String addUser(User newUser) {
+        userRepository.save(newUser);
+         return "User added successfully" ;
     }
 
-    public Optional<User> findUser(Integer id) {
-        return userRepository.findById(id);
+    public User findUser(Integer id) {
+        return userRepository.findById(id).orElse(null);
 
     }
     public String deleteUser(Integer id){
          userRepository.deleteById(id);
-         return "deleted";
+         return "User deleted successfully";
 
     }
-    public Optional<User> updateUser(Integer id, User newUser) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    user.setFirstName(newUser.getFirstName());
-                    user.setLastName(newUser.getLastName());
-                    user.setEmail(newUser.getEmail());
-                    user.setPassword(newUser.getPassword());
-                    user.setAge(newUser.getAge());
-                    return userRepository.save(user);
-                });
-
+    public String updateUser(Integer id, User newUser) {
+        User user= userRepository.findById(id).orElse(null);
+        if(user!=null){
+            user.setFirstName(newUser.getFirstName());
+            user.setLastName(newUser.getLastName());
+            user.setEmail(newUser.getEmail());
+            user.setPassword(newUser.getPassword());
+            user.setAge(newUser.getAge());
+            userRepository.save(user);
+            return "User updated successfully";
+        }
+        else{
+            return "user not found.";
+        }
     }
+    public User findUserByEmail(String email){
+        return userRepository.getUserByEmail(email);
+    };
 }
